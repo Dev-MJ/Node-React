@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+    <title></title>
+
+</head>
+<body>
+<script type="text/javascript">
+    function Test(name, title){
+        var privateVal = "private value";   //private 변수
+        this.name = name;   //public 변수
+        this.title = title;
+        this.myfunc = function(){
+            console.log(this.name + "print");
+        }
+
+        this.publicPrivate = privateVal     //외부에서 사용기 위해서 public 변수에 private 변수를담는다.
+    }
+
+    var myTest = new Test("이름","제목");
+    var abcTest = new Test("두번째이름","두번쨰제목");
+    console.log(myTest.name);
+    console.log(abcTest);
+    myTest.myfunc();
+
+    console.log(myTest.privateVal);     //private 변수 바로 가져와 사용할 수 없음.
+    console.log(myTest.publicPrivate);
+</script>
+
+</body>
+</html>

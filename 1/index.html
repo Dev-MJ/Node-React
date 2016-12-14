@@ -1,0 +1,54 @@
+<!DOCTYPE html>     <!-- <html -->
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+    <title>타이틀</title>
+    <!-- 외부파일로부터 스타일 불러오기 -->
+    <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        .test {float: right;}  /*flr*/
+        .test {float: left;}   /*fll*/
+        .test { background: #000; }  /*bg*/
+
+        /*header안에 스타일 선언 2nd*/
+        .a_class {color: green;}
+    </style>
+</head>
+<body>
+    <div id="test"></div>       <!-- #test -->
+    <div class="container"></div>   <!-- .container -->
+    <a href=""></a>     <!-- a -->
+    <a href="" class="btn"></a>     <!-- a.btn -->
+    <table>     <!-- table>tr*3>td*5 -->
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <!-- 내부스타일로 선언 -->
+    <div style="color: red">내부스타일로 선언</div>     <!-- rgb색상값도 가능 -->
+
+    <!-- header안에 스타일 선언 1st -->
+    <div class="a_class">header안에서 스타일 선언</div>
+
+    <div class="b_class">외부파일로부터 스타일 불러오기</div>
+</body>
+</html>

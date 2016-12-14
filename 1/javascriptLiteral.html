@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+<meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    var aaa = {
+        numberVal : 111,
+        arrayVal : "문자형",
+        fVal : function(){
+            console.log("function형");
+        },
+    };
+
+    console.log(typeof aaa);
+    console.log(aaa.numberVal);
+    console.log(aaa.arrayVal);
+    console.log(aaa.fVal);
+    aaa.fVal();
+
+
+    for( var property in aaa){
+        console.log("property = " + property + " / value = " + aaa[property]);
+    }
+
+</script>
+
+</body>
+</html>

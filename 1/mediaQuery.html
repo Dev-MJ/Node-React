@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<meta charset="utf-8">
+<head>
+    <title>모바일, 태블릿, 데스크탑에 맞게 컨텐츠를 나열한다.</title>
+    <style type="text/css">
+/*    .wrap { color: blue; }*/
+        @media(max-width: 600px){   /*600 이하로 내려가면 이 부분 실행*/
+            .wrap { color: red; }
+        }
+        @media (min-width: 600px)) {
+            .wrap { color: black; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        줄바꿈
+    </div>
+</body>
+</html>

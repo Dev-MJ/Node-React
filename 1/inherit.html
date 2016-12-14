@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    function Car() {
+        this.name = "Super class";
+        this.showName = function () {
+            console.log(this.name + " show ");
+        }
+    }
+    function Taxi() {
+        var _super = new Car();
+        _super.name = "Taxi class";
+        return _super;
+    }
+
+    var myTaxi = new Taxi();
+        myTaxi.showName();      //Taxi에는 showName 이라는 func 없지만, return 을 Car()를 하므로 Car에 있는 showName() 을 사용할 수 있다.
+</script>
+
+</body>
+</html>

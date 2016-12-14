@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    function Car() {
+
+    }
+    Car.prototype.color = "red";    //객체의 속성을 추가하는 것이다!!
+    Car.prototype.move = function(){
+        console.log(this.color);
+    }
+    var myCar = new Car();
+    console.log(myCar.color);
+    myCar.move();
+</script>
+</body>
+</html>

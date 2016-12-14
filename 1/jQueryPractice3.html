@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+    <title>스탑워치</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        .clockDiv { margin-bottom: 20px; }
+        .clockDiv span { font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container" stype="padding-top:100px">
+        <div class="clockDiv">
+            <span id="min">00</span> :
+            <span id="sec">00</span> :
+            <span id="milisec">000</span>
+        </div>
+        <div>
+            <a class="btn btn-default" id="start">시작</a>   <!-- class명은 부트스트랩에 정의된 것을 사용하는거임 -->
+            <a class="btn btn-danger" id="pause">중지</a>
+            <a class="btn btn-primary" id="reset">리셋</a>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+var Timer = {
+    isPending : false,  //reset, pause 시 false, start시 true
+    currentMin : 0,
+    currentSec : 0,
+    currentMiliSec : 0,
+
+    startTimer : function(){
+        if(this.isPending) {
+            this.currentMiliSec +=1;
+            if(this.currentMiliSec == 100){
+                this.currentSec += 1;
+                this.currentMiliSec = 00
+                if(this.currentSec == 60) {
+                    this.currentSec = 0;
+                    this.currentMin += 1;
+                }
+            }
+
+            $('#min').html( ('0' + this.currentMin).slice(-2) );
+            $('#sec').html( ('0' + this.currentSec).slice(-2) );
+            $('#milisec').html( ('00'+this.currentMiliSec).slice(-2) );
+            setTimeout("Timer.startTimer()", 1);
+        }
+    },
+
+    // startTimer : function(){
+    //     if(this.isPending){
+    //         this.currentSec+=1;
+    //         if(this.currentSec==60){
+    //             this.currentSec=0;
+    //             this.currentMin+=1;
+    //         }
+    //         $('#min').html( ('0' + this.currentMin).slice(-2) );
+    //         $('#sec').html( ('0' + this.currentSec).slice(-2) );
+    //         setTimeout("Timer.startTimer()", 1000);
+    //     }
+    // },
+
+    pauseTimer : function(){
+        this.isPending = false
+    },
+
+    resetTimer : function(){
+        this.isPending = false
+        this.curreentSec = 0
+        this.currentMin = 0
+        this.currentMiliSec = 0
+
+         $('#min').html( "00" );
+        $('#sec').html( "00" );
+        $('#milisec').html( "000" );
+    }
+
+}
+$(function(){
+    $('#start').click(function(){
+        Timer.isPending = true;
+        Timer.startTimer();
+    });
+    $('#pause').click(function(){
+        Timer.pauseTimer();
+    });
+    $('#reset').click(function(){
+        Timer.resetTimer();
+    });
+})
+
+
+</script>
+
+</body>
+</html>

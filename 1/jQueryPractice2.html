@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+    <title>폼 검증</title>
+<!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+    <div class="container" stype ="padding-top:100px">
+    <form action = "" method = "post" id="submitForm">
+        <table class="table table-bordered">
+                <tr>
+                    <th>제목</th>
+                    <td><input name="subject" type="text" class="form-control"></td>
+                </tr>
+                <tr>
+                    <th>이메일</th>
+                    <td><input name="email" type="text" class="form-control"></td>
+                </tr>
+                <tr>
+                    <th>거주지</th>
+                    <td>
+
+                        <select name = "division">
+                            <option value="">선택해주세요.</option>
+                            <option value="서울시">서울</option>
+                            <option value="인천시">인천</option>
+                            <option value="수원시">수원</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <textarea name="content" class="form-control"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <button class ="btn btn_primary">작성합니다</button>
+            </div>
+    </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript">
+    $(function(){
+        $('#submitForm').submit(function(){
+            var subjectInput = $('#submitForm input[name=subject]');
+            var emailInput = $('#submitForm input[name=email]');
+            var divisionInput = $('#submitForm select[name=division]');
+            var contentInput = $('#submitForm textarea[name=content]');
+
+            if(!subjectInput.val()){
+                alert("제목을 입력해주세요");
+                subjectInput.focus();
+                return false;
+            }
+            if(!emailInput.val()){
+                alert("이메일을 입력해주세요");
+                emailInput.focus();
+                return false;
+            }
+            if(!divisionInput.val()){
+                alert("거주지을 선택해주세요");
+                divisionInput.focus();
+                return false;
+            }
+            if(!contentInput.val()){
+                alert("내용을 입력해주세요");
+                contentInput.focus();
+                return false;
+            }
+
+        })
+    })
+</script>
+</body>
+</html>

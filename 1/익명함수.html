@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+//글로벌 변수에 영향을 받지않고 변수들 사용할 수 있음
+
+var test = (function(){
+    this.name = "title";
+    return {
+        a : "111",
+        b : "222"
+    };
+})();
+
+console.log(test);
+console.log(test.a);
+console.log(test.name); //undefined
+
+
+
+</script>
+</body>
+</html>
