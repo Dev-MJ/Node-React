@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title></title>
+</head>
+<body>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script type="text/javascript">
+
+function test(name, title, callback) {
+    // body...
+    this.name = name;
+    this.title = title;
+
+    console.log("콜백호출");
+//    callback(); //callback을 받아서 바로 실행한다는 것
+//    callback("qwer");
+    callback(1,2,3,4,5);
+}
+
+test("이름","타이틀", function(){    //콜백은 function이어야만 함
+    console.log("콜백실행");
+});
+test("이름","타이틀", function(firstArg){    //콜백은 function이어야만 함
+    console.log(firstArg);
+});
+test("이름","타이틀", function(){    //따로 인자를 받지 않아도 arguments라는 녀셕에게 전달됨
+    for (var i = 0; i < arguments.length; i++) {
+        console.log(arguments[i])
+    }
+});
+</script>
+</body>
+</html>

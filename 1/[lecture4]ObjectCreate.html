@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script>
+//java에서 new와 같음.
+function Car(){
+    this.name = "내차";
+    this.title = "타이틀";
+}
+Car.prototype.move = function(){
+    console.log(this.name +" 이동");  //undefind뜸.
+}
+//var myCar = Object.create(Car.prototype);   //이렇게 하면 위의 this.name이 undefined.
+var myCar = Object.create(Car.prototype, {  //property를 사용하겠다고 이렇게 선언해줘야함.
+    name : {
+        value : "myCar",    //초기값 설정
+        writable: true      //쓰기 가능하게 설정
+    }
+});
+console.log(Car.prototype);
+myCar.move();
+
+
+//복수 속성 설정가능
+Object.defineProperties(myCar, {
+        name : {
+        value : "myCar",    //초기값 설정
+        writable: true      //쓰기 가능하게 설정
+    }
+});
+myCar.move();
+
+
+
+//call로 생성할 수도 있음. 위에 Object방법은 복잡하니까 :()
+Car.call(myCar);
+myCar.move();
+
+
+</script>
+</body>
+</html>

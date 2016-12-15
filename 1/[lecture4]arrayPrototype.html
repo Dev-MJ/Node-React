@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script>
+//Array의 prototype에 접근하여 arraySearchRemove라는 함수를 Array 내에 추가한다
+    Array.prototype.arraySearchRemove = function($search){
+        var index = this.indexOf($search);  //this : array
+        if(index !== -1){   //-1 이면 존재하지 않는다는 말. -1이 아니면 해당 위치를 반환함.
+            this.splice(index, 1);
+        }
+    };
+    var test = ["1","2","3","4","5","6","7","8","9","10"];
+    test.arraySearchRemove("4");
+    console.log(test);
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title></title>
+</head>
+<body>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script type="text/javascript">
+
+function a(){
+    console.log('a');
+    return this;
+}
+function b(){
+    // body...
+    console.log('b');
+    return this;
+}
+a().b();
+
+
+var account = {
+    id : "",
+    password : "",
+    setId : function(value){
+        this.id = value;
+        return this;
+    },
+    setPassword : function(value){
+        this.password = value;
+        return this;        //자신을 return해야 chaining 사용 가능!!!!!
+    },
+    print : function(){
+        console.log(this.id);   //this로 해야함.
+        console.log(this.password);
+    }
+}
+account.setId("mr.lucifers@gmail.com").setPassword("비밀번호");
+account.print();
+</script>
+</body>
+</html>

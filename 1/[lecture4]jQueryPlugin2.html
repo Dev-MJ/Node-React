@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="clickDiv">
+        글자색변환
+    </div>
+    <div id="secondDiv">
+        두번째 셀럭터
+    </div>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="[lecture4]jquery-changeColor.js"></script>
+<script>
+(function($){
+    // $.fn.changeColor = function(){
+    //     this.each(function(){       //this : jQuery 객체. 셀렉터 전체 적용하기 위해 each 사용
+    //         var $dom = $(this);     //this : 각 dom
+    //         $dom.click(function(){
+    //             $dom.css("color","red");
+    //         });
+    //     });
+    // };       => [lecture4]jquery-changeColor.js 로 이동시킴(라이브러리화)
+    $(document).ready(function() {
+        $("#clickDiv, #secondDiv").changeColor();
+//        $("#secondDiv").changeColor();
+    });
+})(jQuery);
+
+</script>
+</body>
+</html>

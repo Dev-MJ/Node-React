@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script type="text/javascript">
+
+//new 대신 Object.create() 로 객체를 생성한다!!
+
+//프로토타입지향 : 프로토타입을 가져와서 복제하여 사용한다
+//객체지향 : 클래스 생성하여 인스턴스 생성후 사용
+function Car() {}
+console.log(Car.prototype); //function을 생성하면 동시에 프로토타입 객체가 생성됨. 이 두 녀석은 서로를 참조하는 관계임(function <-> prototype)
+//개발자콘솔에서 object를 열어보면 contructor -> prototype -> constructor -> prototype..... 계속 반복
+//new Car(); 인 경우도 function Car의 프로토타입을 가리킴.
+var myCar = new Car();
+console.log(myCar.constructor === Car); //true
+console.log(myCar.constructor.prototype === Car.prototype); //true
+console.log(myCar.constructor === myCar.constructor.prototype.constructor); //true
+
+
+var myCar1 = new Car();
+var myCar2 = new Car();
+///// myCar1, myCar2 는 Car 의 prototype을 가리키고 있다.
+Car.prototype.color = "red";
+console.log(myCar1.color);
+console.log(myCar2.color);
+//prototype은 공유되는 객체이므로 프로토타입을 변환시키면 모든 것에 적용된다.
+Car.prototype.color = "blue"
+myCar1.color = "yellow";    //이렇게 지정을 하면 지정된 것을 뽑는다.
+console.log(myCar1.color);
+console.log(myCar2.color);
+
+
+
+
+////////property 출력해보기  => property와 prototype은 다르다는 것을 알려주기 위함////////////
+function Car2() {
+    this.name = "첫번째";
+    this.title = "타이틀";
+}
+Car.prototype.pro1 = "val1";
+Car.prototype.pro2 = "val2";
+var myCar3 = new Car2();
+var prop;
+for(prop in myCar3){    //key값을 받아오는것.
+    if(myCar3.hasOwnProperty(prop)){    //prop이 myCar3의 property가 맞는지
+        console.log(prop + " = " + myCar3[prop]);
+    }
+}
+
+//리터럴로 선언되었을 때의 prototype???????????//
+var a = {};     // = var a = new Object();
+
+</script>
+</body>
+</html>
