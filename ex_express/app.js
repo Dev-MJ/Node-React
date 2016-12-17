@@ -5,6 +5,21 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
+
+var db = mongoose.connection;   //몽고db에 연결
+db.on( 'error', console.error); //db 연결에 실패했을 떄
+db.once('open',function(){  //db에 연결되었을때
+    console.log("MongoDB connect");
+});
+var connect = mongoose.connect('mongodb://127.0.0.1/post'); //몽고디비에서 post라는 db를 자동으로 생성함. or 여기에 접속
+autoIncrement.initialize(connect);  //autoincrement 설정
+
+
+
+
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 var posts = require('./routes/posts');
