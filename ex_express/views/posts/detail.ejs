@@ -1,0 +1,76 @@
+
+<% include ../header.ejs %>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            제목 : <%=post.title %>
+        </div>
+        <div class="panel-body">
+            <p>작성일 : <%=post.getDate.year%>-<%=post.getDate.month%>-<%=post.getDate.day%></p>
+            <%=post.content %>
+
+            <hr/>
+
+            <div id="comment_area">      <!-- 댓글 append될 부분 -->
+                <% comments.forEach(function(comment){ %>
+                    <div> ㄴ> <%=comment.content%></div><hr/>
+                <% });%>
+            </div>
+
+            <div>
+                댓글작성하기
+                <form id="commentForm" action="" method="post">
+                    <input type="hidden" name="post_id" value="<%=post.id%>" />
+                    <textarea class="form-control" name="content"></textarea>
+                    <button class="btn btn-primary" style="margin-top: 10px">댓글작성</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <a href="/posts" class="btn btn-default">목록으로</a>
+        <a href="/posts/edit/<%=post.id%>" class="btn btn-primary">수정</a>
+        <a href="/posts/delete/<%=post.id%>" onclick="return confirm('삭제하시겠습니까?')" class="btn btn-danger">삭제</a>
+    </div>
+
+
+<script type="text/javascript">
+(function(){
+    $(document).ready(function() {
+        $('#commentForm').submit(function(){
+            var contentTxt = $(this).children('textarea[name=content]');
+            if(!contentTxt.val()){
+                alert('댓글 내용을 입력해주세요');
+                contentTxt.focus();
+            }else{
+
+                $.ajax({
+                    url: '/posts/ajax_comment/insert',
+                    type: 'POST',
+                    data: $(this).serialize(),  //현재 this의 form 하위의 data들을 알아서 parameter들을 생성해준다
+                })
+                .done(function(args) {  //posts.js에서 라우팅을 통해 받은 값을 args로 받아옴 (res.send(req.body);)
+                    console.log(args);
+                    if(args.message==="success"){
+                        $('#comment_area').append(
+                            "<div> ㄴ> " + args.content + " ( <a class='comment_delete' comment_id='" + args.id +"'>삭제</a> ) </div><hr/>"
+                        );
+                        contentTxt.val("");
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+
+            }
+            return false;
+        });
+    });
+})();
+</script>
+
+<% include ../footer.ejs %>

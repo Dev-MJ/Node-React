@@ -1,16 +1,20 @@
 <% include ../header.ejs %>
 
+    <!-- <%= posts %>        posts.js로부터 받아온 posts를 여기서 쏴줌 -->
     <table class="table table-bordered">
         <tr>
             <th>제목</th>
             <th>작성일</th>
             <th>삭제</th>
         </tr>
+        <% posts.forEach(function(post){%>
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><a href="/posts/detail/<%=post.id%>"><%=post.title%></a></td>
+<!--        <td><%=post.created_at%></td> -->
+            <td><%=post.getDate.year%>-<%=post.getDate.month%>-<%=post.getDate.day%></td>           <!-- 가상필드 생성하여 날짜 출력부분 -->
+            <td><a href="/posts/delete/<%=post.id%>" class="btn btn-danger" onclick="return confirm('삭제하시겠습니까?')">삭제</a></td>
         </tr>
+        <%});%>
     </table>
     <div>
         <a href="/posts/write" class="btn btn-primary">글작성</a>

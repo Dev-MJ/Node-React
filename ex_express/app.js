@@ -5,7 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
+
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;  //mongoose v4 이상의 버전부터 mongoose의 save()와 쿼리같은 비동기 동작에서는 Promises/A+ conformant pomises를 반환하게 되어있다.
 var autoIncrement = require('mongoose-auto-increment');
 
 var db = mongoose.connection;   //몽고db에 연결
@@ -13,8 +16,10 @@ db.on( 'error', console.error); //db 연결에 실패했을 떄
 db.once('open',function(){  //db에 연결되었을때
     console.log("MongoDB connect");
 });
-var connect = mongoose.connect('mongodb://127.0.0.1/post'); //몽고디비에서 post라는 db를 자동으로 생성함. or 여기에 접속
+var connect = mongoose.connect('mongodb://127.0.0.1/fastcampus'); //몽고디비에서 fastcampus라는 db를 자동으로 생성함. or 여기에 접속
 autoIncrement.initialize(connect);  //autoincrement 설정
+
+
 
 
 
