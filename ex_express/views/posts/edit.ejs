@@ -1,14 +1,29 @@
 <% include ../header.ejs %>
 
-    <form action="" method="post">
+    <!-- <form action="" method="post"> -->
+    <form action="" method="post" enctype="multipart/form-data">    <!-- 파일도 전송할 수 있게끔 enctype 추가 -->
+    <input type="hidden" name="_csrf" value="<%=csrfToken%>" />    <!--  view에 csrfToken적용 -->
     <table class="table">
         <tr>
             <th>제목</th>
-            <td><input type="text" name="title" class="form-control" value="<%=post.title%>"/></td>
+            <td>
+                <input type="text" name="title" class="form-control" value="<%=post.title%>"/>
+            </td>
         </tr>
         <tr>
             <th>내용</th>
-            <td><input type="text" name="content" class="form-control" value="<%=post.content%>"/></td>
+            <td>
+                <input type="text" name="content" class="form-control" value="<%=post.content%>"/>
+            </td>
+        </tr>
+        <tr>
+            <th>섬네일</th>
+            <td>
+                <input type="file" name="thumbnail" />
+                <% if(post.thumbnail){%>
+                <a href="/uploads/<%=post.thumbnail%>" target="_blank">업로드된 이미지 보기</a>
+                <% }%>
+            </td>
         </tr>
     </table>
     <div>

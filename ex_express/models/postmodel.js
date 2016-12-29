@@ -3,8 +3,13 @@ var Schema = mongoose.Schema;
 var autoIncrement = require('mongoose-auto-increment');
 
 var postSchema = new Schema({   //몽고DB의 스키마 작성.
-    title: String,
+//    title: String,
+    title : {   //validator 설정!
+        type: String,
+        required: [true, '제목을 입력해주세요']
+    },
     content: String,
+    thumbnail: String,  //썸네일 콜론 추가(파일 업로드 위해 - 파일명임)
     created_at : {
         type: Date,
         default: Date.now()
@@ -20,6 +25,10 @@ postSchema.virtual('getDate').get(function(){   //getDate를 호출하게 되면
         day: date.getDate()
     };
 });
+//validator를 path방식으로 설정하기
+postSchema.path('content').validate(function(value){
+    return value.length > 0;
+}, '내용을 입력해주세요');
 
 
 //insert 할 때마다 primaryKey가 1씩 증가되도록 plugin 설정

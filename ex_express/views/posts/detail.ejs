@@ -7,13 +7,25 @@
         </div>
         <div class="panel-body">
             <p>작성일 : <%=post.getDate.year%>-<%=post.getDate.month%>-<%=post.getDate.day%></p>
+
+            <!-- 이미지 출력 작성 -->
+            <% if(post.thumbnail) {%>
+            <p>
+                <img src="/uploads/<%=post.thumbnail%>" style="max-width: 100%"/>
+            </p>
+            <% }%>
+
             <%=post.content %>
 
             <hr/>
 
             <div id="comment_area">      <!-- 댓글 append될 부분 -->
                 <% comments.forEach(function(comment){ %>
-                    <div> ㄴ> <%=comment.content%></div><hr/>
+                    <div> ㄴ> <%=comment.content%>
+                        ( <a class='comment_delete' comment_id='<%comment.id%>'>삭제</a>
+                        )
+                    </div>
+                    <hr/>
                 <% });%>
             </div>
 
@@ -44,11 +56,10 @@
                 alert('댓글 내용을 입력해주세요');
                 contentTxt.focus();
             }else{
-
-                $.ajax({
+                $.ajax({    //jQuery 이용한 ajax
                     url: '/posts/ajax_comment/insert',
                     type: 'POST',
-                    data: $(this).serialize(),  //현재 this의 form 하위의 data들을 알아서 parameter들을 생성해준다
+                    data: $(this).serialize(),  //jQuery에서 제공하는 메소드. 현재 this의 form 하위의 data들을 알아서 parameter들을 생성해준다.
                 })
                 .done(function(args) {  //posts.js에서 라우팅을 통해 받은 값을 args로 받아옴 (res.send(req.body);)
                     console.log(args);
@@ -68,6 +79,25 @@
 
             }
             return false;
+        });
+
+        $(document).on('click' , '.comment_delete' , function(){    //comment_delete라는 클래스 클릭했을 떄 실행
+            if(confirm('삭제하시겠습니까?')){ //확인창 예 눌렀을 시만 진행
+                var $self = $(this);    //dom의 ???????????????????????
+                $.ajax({
+                    url: '/posts/ajax_comment/delete',
+                    type: 'POST',
+                    data: { comment_id : $self.attr('comment_id') },
+                })
+                .done(function(args) {
+                    $self.parent().remove();
+//                    alert("삭제가 완료되었습니다.");
+                    alert(args.message);
+                })
+                .fail(function(args) {
+                    console.log(args);
+                });
+            }
         });
     });
 })();

@@ -28,6 +28,7 @@ autoIncrement.initialize(connect);  //autoincrement 설정
 var index = require('./routes/index');
 var users = require('./routes/users');
 var posts = require('./routes/posts');
+var accounts = require('./routes/accounts');
 
 
 var app = express();
@@ -44,9 +45,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//업로드 path 추가
+app.use('/uploads',express.static('uploads'));  //express의 static으로 uploads라는 폴더를 사용할 것이다. url은 /uploads
+
+
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/posts',posts);
+app.use('/accounts', accounts);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
