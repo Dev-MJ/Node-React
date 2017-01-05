@@ -3,6 +3,9 @@ var router = express.Router();
 var postModel = require('../models/postmodel.js');  //생성한 postmodel.js를 가져옴
 var CommentModel = require('../models/CommentModel.js');
 
+//로그인 체크 미들웨어 require.
+var loginRequired = require('../libs/loginRequired');
+
 
 //이미지 저장되는 위치 설정
 var path = require('path');
@@ -57,13 +60,13 @@ router.get('/', myMiddle, function(req,res){  //url : localhost:300/posts
 });
 
         //view에 인자로 넘기기 위해 파라메터 설정  ㄱ
-router.get( '/write', parseForm, csrfProtection, function(req,res){     //url : localhost:300/posts/write
+router.get( '/write', loginRequired, parseForm, csrfProtection, function(req,res){     //url : localhost:300/posts/write
     var post = {};      //edit.ejs를 수정에서도 쓰기 떄문에 post를 보내지 않으면 에러가 난다.
     res.render('posts/edit', { post: post, csrfToken: req.csrfToken() });   //views/posts/edit 를 띄우겠다
                                             //ㄴ> view에 post뿐 아니라 csrfToken도 인자로 넘긴다
 });
-//thumbnail의 필드명 저장(이 이름은 ejs에서의 name임)  ㄱ    /    받는 쪽에도 csrf 설정 ㄱ (csrf 확인용도. 이게 없으면 csrf 확인 자체를 안함)
-router.post( '/write', upload.single('thumbnail'), csrfProtection, function(req,res){   //edit.
+       //thumbnail의 필드명 저장(이 이름은 ejs에서의 name임)  ㄱ    /    받는 쪽에도 csrf 설정 ㄱ (csrf 확인용도. 이게 없으면 csrf 확인 자체를 안함)
+router.post( '/write', loginRequired, upload.single('thumbnail'), csrfProtection, function(req,res){   //edit.
 //    res.send(req.body); //{title: 123, content : 123} 으로 출력됨
 
     console.log(req.file);  //request의 file로 날아옴(multer라 file의 파라메터들을 정렬해줌)
@@ -81,7 +84,8 @@ router.post( '/write', upload.single('thumbnail'), csrfProtection, function(req,
     var post = new postModel({
         title: req.body.title,
         content: req.body.content,
-        thumbnail: (req.file) ? req.file.filename : ""      //req.file이 있으면 req.file.filename을 저장, 없으면 "" 공백저장
+        thumbnail: (req.file) ? req.file.filename : "",      //req.file이 있으면 req.file.filename을 저장, 없으면 "" 공백저장
+        username: req.user.username //req.user : 세션정보 접근
 
     });
 
@@ -110,8 +114,8 @@ router.get( '/detail/:id' , function(req,res){          //url : localhost:3000/p
     });
 });
 
-//글 수정
-router.get( '/edit/:id', parseForm, csrfProtection, function(req,res){         //url : localhost:3000/posts/edit/id
+//글 수정       로그인 체크 미들웨어 넣음 ㄱ
+router.get( '/edit/:id', loginRequired, parseForm, csrfProtection, function(req,res){         //url : localhost:3000/posts/edit/id
     postModel.findOne({ id: req.params.id }, function(err, post){
 
         res.render('posts/edit', { post : post, csrfToken: req.csrfToken() });
@@ -119,7 +123,7 @@ router.get( '/edit/:id', parseForm, csrfProtection, function(req,res){         /
 });
 
 //글 수정 update
-router.post( '/edit/:id', upload.single('thumbnail'), csrfProtection, function(req,res){
+router.post( '/edit/:id', loginRequired,upload.single('thumbnail'), csrfProtection, function(req,res){
 
     postModel.findOne({ id: req.params.id}, function(err,post){ //기존에 해당 글의 thumbnail 명을 select 해옴.
 

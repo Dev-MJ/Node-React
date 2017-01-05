@@ -7,6 +7,15 @@ var bodyParser = require('body-parser');
 
 
 
+//flash 메세지 관련
+var flash = require('connect-flash');
+//passport 관련
+var passport = require('passport');
+var session = require('express-session');
+
+
+
+
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;  //mongoose v4 이상의 버전부터 mongoose의 save()와 쿼리같은 비동기 동작에서는 Promises/A+ conformant pomises를 반환하게 되어있다.
 var autoIncrement = require('mongoose-auto-increment');
@@ -30,6 +39,10 @@ var users = require('./routes/users');
 var posts = require('./routes/posts');
 var accounts = require('./routes/accounts');
 
+//auth 라우터 설정(facebook)
+var auth = require('./routes/auth'); //auth.js파일 만들어야함..
+
+
 
 var app = express();
 
@@ -50,10 +63,43 @@ app.use('/uploads',express.static('uploads'));  //express의 static으로 upload
 
 
 
+
+//세션관련
+app.use(session({
+    secret: 'fastcampus',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 2000 * 60 * 60 //지속시간 2시간
+    }
+}));
+
+//passport 적용
+app.use(passport.initialize());
+app.use(passport.session());
+
+//플래시 메시지 관련
+app.use(flash()); //app.use('/', index) 위에 있어야함
+
+
+
+//로그인 정보. 뷰에서만 변수로 셋팅, 전체 미들웨어는 router위에 두어야 에러가 안난다
+app.use(function(req, res, next) {
+  app.locals.isLogin = req.isAuthenticated();
+  //app.locals.urlparameter = req.url; //현재 url 정보를 보내고 싶으면 이와같이 셋팅
+  //app.locals.userData = req.user; //사용 정보를 보내고 싶으면 이와같이 셋팅
+  next();
+});
+
+
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/posts',posts);
 app.use('/accounts', accounts);
+
+//auth 관련 설정한 라우터 적용
+app.use('/auth',auth);
 
 
 // catch 404 and forward to error handler

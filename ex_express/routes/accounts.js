@@ -3,6 +3,39 @@ var router = express.Router();
 var UserModel = require('../models/UserModel');
 var passwordHash = require('../libs/passwordHash');
 
+//passport 정책 설정
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
+
+passport.use(new LocalStrategy({
+        usernameField: 'username',
+        passwordField : 'password',
+        passReqToCallback : true
+    },
+    function (req, username, password, done) {
+        UserModel.findOne({ username : username , password : passwordHash(password) }, function (err,user) {
+            if (!user){
+                return done(null, false, { message: '아이디 또는 비밀번호 오류 입니다.' });
+            }else{
+                return done(null, user );
+            }
+        });
+    }
+));
+
+
+
+
+
+
 router.get('/',function(req,res){
     res.send('accounts app');
 });
@@ -23,13 +56,41 @@ router.post('/join', function(req,res){
 });
 
 
+//로그인 페이지로 이동
+// router.get('/login',function(req,res){
+//     res.render('accounts/login');
+// });
 
-router.get('/login',function(req,res){
-    res.render('accounts/login');
+//flash message 설정
+router.get('/login', function(req, res){
+    res.render('accounts/login', { flashMessage : req.flash().error });
 });
+
+
+//login에 passport 적용
+router.post('/login' ,
+    passport.authenticate('local', {    //local strategy 사용하겠다는 말
+        failureRedirect: '/accounts/login',
+        failureFlash: true
+    }),
+    function(req, res){
+        //res.send('<script>alert("로그인 성공");location.href="/accounts/success";</script>');
+        res.send('<script>alert("로그인 성공");location.href="/posts";</script>');   //로그인 성공하면 posts로 이동되게끔
+    }
+);
+
+
 
 router.get('/success',function(req,res){
     res.send('accounts success');
-})
+    res.send(req.user); //현재 세션에 접근할 수 있음
+
+});
+
+
+router.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/accounts/login');
+});
 
 module.exports = router;
