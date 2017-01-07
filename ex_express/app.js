@@ -42,6 +42,9 @@ var accounts = require('./routes/accounts');
 //auth 라우터 설정(facebook)
 var auth = require('./routes/auth'); //auth.js파일 만들어야함..
 
+//chatting 라우터 설정(socket.io)
+var chat = require('./routes/chat');
+
 
 
 var app = express();
@@ -63,7 +66,7 @@ app.use('/uploads',express.static('uploads'));  //express의 static으로 upload
 
 
 
-
+/*
 //세션관련
 app.use(session({
     secret: 'fastcampus',
@@ -73,6 +76,19 @@ app.use(session({
       maxAge: 2000 * 60 * 60 //지속시간 2시간
     }
 }));
+*/
+
+//채팅 위해 세션 미들웨어 수정
+var sessionMiddleWare = session({
+  secret: 'fastcampus',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 2000 * 60 * 60
+  }
+});
+app.use(sessionMiddleWare);
+
 
 //passport 적용
 app.use(passport.initialize());
@@ -101,6 +117,9 @@ app.use('/accounts', accounts);
 //auth 관련 설정한 라우터 적용
 app.use('/auth',auth);
 
+//chat 관련 설정한 라우터 적용
+app.use('/chat',chat);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -119,5 +138,28 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+
+//socket.io 세팅
+app.io = require('socket.io')();
+/*
+app.io.on('connection',function(socket){
+  console.log(socket.id); //나의 소켓 아이디
+  console.log('socket.io connected....');
+});
+*/
+
+//socket io passport 접근하기 위한 미들웨어 적용
+app.io.use(function(socket, next){
+  sessionMiddleWare(socket.request, socket.request.res, next);
+});
+
+require('./libs/socketConnection')(app.io);
+
+
+
+
 
 module.exports = app;

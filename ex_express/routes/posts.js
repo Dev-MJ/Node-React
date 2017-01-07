@@ -42,11 +42,11 @@ function myMiddle(req, res, next){
 
 
 //내가 만든 미들웨어 넣어보자(url과 콜백 사이에 들어가는 것들은 전부 미들웨어!! 콜백이 이루어지기 전에 실행된다 . 여러개 생성 가능)
-router.get('/', myMiddle, function(req,res){  //url : localhost:300/posts
+router.get('/', myMiddle, (req,res) => {  //url : localhost:300/posts
     console.log(req.test);
 //    res.send('post app');
                     //조건이 없으므로 { } 빈칸.
-    postModel.find({ }, function(err, posts){   //(error, 내가 받아올 인자들)
+    postModel.find({ }, (err, posts) => {   //(error, 내가 받아올 인자들)
         res.render( 'posts/list', { posts: posts });    //list.ejs로 posts를 쏴준다.
     });
     //뷰 설정하기
@@ -101,7 +101,7 @@ router.post( '/write', loginRequired, upload.single('thumbnail'), csrfProtection
 
 
 });
-
+/*
 //      :id(\\d+) 이렇게 하면 정규표현식으로써, 숫자만 받을 수 있음
 router.get( '/detail/:id' , function(req,res){          //url : localhost:3000/posts/detail/id
     //주소에 있는 param는 request.params로 받을 수있다.
@@ -113,6 +113,27 @@ router.get( '/detail/:id' , function(req,res){          //url : localhost:3000/p
 
     });
 });
+*/
+
+//callbackHell 개선 promise 이용
+router.get('/detail/:id',function(req,res){
+    var post;
+    //var postModel = PostModel.findOne({'id':req.params.id}).exec();
+    console.log(req.params.id);
+    postModel.findOne({id:req.params.id}).exec().then(function(data){
+        post = data;
+        console.log(data);
+        return CommentModel.find({ post_id : req.params.id }).exec();
+    })
+    .then(function(data){
+        console.log(data);
+        res.render('posts/detail', { post: post, comments: data});
+    });
+});
+
+
+
+
 
 //글 수정       로그인 체크 미들웨어 넣음 ㄱ
 router.get( '/edit/:id', loginRequired, parseForm, csrfProtection, function(req,res){         //url : localhost:3000/posts/edit/id
