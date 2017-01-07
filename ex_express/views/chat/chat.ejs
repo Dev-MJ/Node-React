@@ -1,0 +1,95 @@
+<% include ../header.ejs %>
+<div class="row">
+    <div class="col-sm-10">
+        <div class="panel panel-default" id="chatWrap">
+            <div class="panel-heading">대화내용</div>
+            <div class="panel-body">
+                <ul id="chatBody"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="panel panel-default" id="userWrap">
+            <div class="panel-heading">User</div>
+            <div class="panel-body">
+                <ul id="userList"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <form action="" method="post" id="sendForm">
+
+        <div class="input-group">
+            <input type="hidden" name="socketId">
+            <input type="text" name="message" class="form-control" placeholder="대화내용을 입력해주세요.">
+            <span class="input-group-btn">
+                <button class="btn btn-primary">작성하기</button>
+            </span>
+        </div><!-- /input-group -->
+
+    </form>
+
+</div>
+
+<style type="text/css">
+.panel-default ul { padding-left:0px; }
+.panel-default ul li { list-style:none; padding-left:0px;}
+.panel-default .panel-body {min-height:350px; max-height:350px;  overflow-y:scroll; }
+#chatWrap ul li strong::after { content: " : "; }
+@media (max-width: 768px) {
+    #userWrap { display:none; }
+    #chatWrap .panel-body { min-height:250px; }
+}
+</style>
+<script src="/socket.io/socket.io.js"></script>     <!-- 소켓io모듈이 설치될 때 알아서 static으로 이 경로에 설치됨 -->
+<script>
+/*
+(function(){
+
+    var socket = io();  //서버와의 접속 시작 -> app.js의 app.io.on부분이 시작됨
+
+    socket.on('chat message', function(data){
+        $('#chatBody').append('<li>' + data + '</li>');
+    });
+
+    $(document).ready(function() {
+        $('#sendForm').submit(function(){
+            var $massage = $('#sendForm input[name=message]');
+            socket.emit('chat message', { message : $massage.val()});   //여기서 보낸 메세지명과 서버에서 받는 메세지명이 같아야함('chat message')
+            $massage.val('');
+            return false;
+        });
+    });
+})();
+*/
+(function(){
+    var socket = io(); //서버와의 접속 시작 -> app.js의 app.io.on부분이 시작됨
+    function updateUserList(userList){
+        $('#userList').html("");
+        for(var key in userList){
+            $('#userList').append('<li>' + userList[key] + '</li>');
+        }
+    }
+    socket.on('join', function(data){   //join이벤트 받으면,
+        updateUserList(data);
+    });
+    socket.on('leave', function(data){  //leave 이벤트 받으면,
+        updateUserList(data);
+    });
+
+    socket.on('chat message', function(data){
+        $('#chatBody').append('<li><strong>'+ data.username +'</strong>' + data.message + '</li>');
+    });
+    $(document).ready(function() {
+        $('#sendForm').submit(function(){
+            var $massage = $('#sendForm input[name=message]');
+            socket.emit('chat message', { message : $massage.val()});
+            $massage.val('');
+            return false;
+        });
+    });
+})();
+</script>
+<% include ../footer.ejs %>
